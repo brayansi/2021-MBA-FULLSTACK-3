@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import {
   Divider,
   IconButton,
@@ -6,11 +8,11 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import InfoIcon from "@material-ui/icons/Info";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
 
-import * as React from "react";
+import FormDialog from "../modal/form"
+import RemoveDialog from "../modal/remove"
+import styles from './../../../styles/list.module.css'
+import InfoDialog from "../modal/info";
 
 function createData(
   name: string,
@@ -38,16 +40,10 @@ export default function ListComponent() {
       <ListItem
         alignItems="flex-start"
         secondaryAction={
-          <div>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <InfoIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <EditIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <DeleteIcon />
-            </IconButton>
+          <div className={styles.listAction}>
+            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
+            <FormDialog data={{ type: 'update', data: null}}/>
+            <RemoveDialog />
           </div>
         }
       >
@@ -74,16 +70,10 @@ export default function ListComponent() {
       <ListItem
         alignItems="flex-start"
         secondaryAction={
-          <div>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <InfoIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <EditIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <DeleteIcon />
-            </IconButton>
+          <div className={styles.listAction}>
+            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
+            <FormDialog data={{ type: 'update', data: null}}/>
+            <RemoveDialog />
           </div>
         }
       >
@@ -110,16 +100,10 @@ export default function ListComponent() {
       <ListItem
         alignItems="flex-start"
         secondaryAction={
-          <div>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <InfoIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <EditIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <DeleteIcon />
-            </IconButton>
+          <div className={styles.listAction}>
+            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
+            <FormDialog data={{ type: 'update', data: null}}/>
+            <RemoveDialog />
           </div>
         }
       >
@@ -146,16 +130,10 @@ export default function ListComponent() {
       <ListItem
         alignItems="flex-start"
         secondaryAction={
-          <div>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <InfoIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <EditIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <DeleteIcon />
-            </IconButton>
+          <div className={styles.listAction}>
+            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
+            <FormDialog data={{ type: 'update', data: null}}/>
+            <RemoveDialog />
           </div>
         }
       >
@@ -182,16 +160,10 @@ export default function ListComponent() {
       <ListItem
         alignItems="flex-start"
         secondaryAction={
-          <div>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <InfoIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <EditIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}>
-              <DeleteIcon />
-            </IconButton>
+          <div className={styles.listAction}>
+            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
+            <FormDialog data={{ type: 'update', data: null}}/>
+            <RemoveDialog />
           </div>
         }
       >

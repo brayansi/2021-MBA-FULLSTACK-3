@@ -1,7 +1,9 @@
 import "@fontsource/roboto"
-import React from "react"
+
 import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
+
+import React from "react"
+import styles from '../styles/home.module.css'
 import ListComponent from "./components/list/list"
 import AppBarComponent from "./components/Appbar/AppBarCompoent"
 
