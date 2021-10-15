@@ -1,19 +1,24 @@
-import "@fontsource/roboto"
+import "@fontsource/roboto";
 
-import type { NextPage } from 'next'
+import type { NextPage } from "next";
 
-import React from "react"
-import styles from '../styles/home.module.css'
-import ListComponent from "./components/list/list"
-import AppBarComponent from "./components/Appbar/AppBarCompoent"
+import { StyledEngineProvider } from "@mui/material/styles";
+
+import React from "react";
+import styles from "../styles/home.module.css";
+import ListComponent from "./components/list/list";
+import AppBarComponent from "./components/Appbar/AppBarCompoent";
 
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
-      <AppBarComponent/>
-      <ListComponent/>
+      <StyledEngineProvider injectFirst>
+        <AppBarComponent />
+        <ListComponent />
+      </StyledEngineProvider>
+      ,
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

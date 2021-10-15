@@ -7,22 +7,25 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import EditIcon from "@mui/icons-material/Edit";
 
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+
 import {
   FormControl,
   IconButton,
   InputLabel,
   MenuItem,
   Select,
+  TextField,
 } from "@mui/material";
 
 export default function FormDialog(props: any) {
-
-  const { type, data } = props;
+  const { type } = props;
   const [open, setOpen] = React.useState(false);
-  const [agendamento, setAgendamento] = React.useState(false);
-  const [profissional, setProfficional] = React.useState(false);
-  const [selectedDate, handleDateChange] = React.useState(new Date());
-
+  const [agendamento, setAgendamento] = React.useState(null);
+  const [profissional, setProfficional] = React.useState(null);
+  const [data, setData] = React.useState<Date | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -40,11 +43,26 @@ export default function FormDialog(props: any) {
     setProfficional(event.target.value);
   };
 
+  const onChangeData = (newValue: any) => {
+    setData(newValue);
+  }
+
   const create = () => {
-    if (type === "create") {
-      console.log("cadastrar");
+
+    const x = {agendamento, profissional, data};
+
+    console.log(agendamento);
+    console.log(profissional);
+    console.log(data);
+
+    if(agendamento && profissional && data) {
+      if (type === "create") {
+        console.log("cadastrar");
+      } else {
+        console.log("atualizar");
+      }
     } else {
-      console.log("atualizar");
+      console.log('formulário vazio')
     }
     handleClose();
   };
@@ -95,7 +113,15 @@ export default function FormDialog(props: any) {
             </Select>
           </FormControl>
           <FormControl fullWidth>
-
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                renderInput={(props) => <TextField {...props} />}
+                label="DateTimePicker"
+                value={data}
+                onChange={onChangeData}
+                inputFormat="dd-MM-yyyy HH:mm"
+              />
+            </LocalizationProvider>
           </FormControl>
         </DialogContent>
         <DialogActions>
