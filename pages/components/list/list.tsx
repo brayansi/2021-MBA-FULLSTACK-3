@@ -13,25 +13,18 @@ import RemoveDialog from "../modal/remove"
 import styles from './../../../styles/list.module.css'
 import InfoDialog from "../modal/info";
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+import * as agendamentoService from "../../services/agendamentoService";
 
 export default function ListComponent() {
+  
+  React.useEffect(() => {
+      agendamentoService.getAgendamento().then((list)=> {
+        console.log(list);
+      }).catch(()=> {
+        console.log('error')
+      });
+  }, []);
+
   return (
     <List sx={{ width: "100%", height: "100%" }}>
       {/* Item */}
@@ -42,7 +35,8 @@ export default function ListComponent() {
           <div className={styles.listAction}>
             <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
             <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog />
+            <RemoveDialog data={{id: '01'}} />
+
           </div>
         }
       >
@@ -72,7 +66,8 @@ export default function ListComponent() {
           <div className={styles.listAction}>
             <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
             <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog />
+            <RemoveDialog data={{id: '01'}} />
+
           </div>
         }
       >
@@ -102,7 +97,7 @@ export default function ListComponent() {
           <div className={styles.listAction}>
             <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
             <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog />
+            <RemoveDialog data={{id: '01'}} />
           </div>
         }
       >
@@ -132,7 +127,8 @@ export default function ListComponent() {
           <div className={styles.listAction}>
             <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
             <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog />
+            <RemoveDialog data={{id: '01'}} />
+
           </div>
         }
       >
@@ -162,7 +158,8 @@ export default function ListComponent() {
           <div className={styles.listAction}>
             <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
             <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog />
+            <RemoveDialog data={{id: '01'}} />
+
           </div>
         }
       >

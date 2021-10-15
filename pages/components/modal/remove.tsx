@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as agendamentoService from "../../services/agendamentoService";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -10,7 +11,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { IconButton } from "@mui/material";
 
-export default function RemoveDialog() {
+export default function RemoveDialog(props: any) {
+  const { data } = props;
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -22,13 +24,25 @@ export default function RemoveDialog() {
   };
 
   const remove = () => {
-    console.log('remover');
+    agendamentoService
+      .deleteAgendamento(data.id)
+      .then(() => {
+        console.log("sucesso");
+      })
+      .catch(() => {
+        console.log("error");
+      });
     handleClose();
-  }
+  };
 
   return (
     <div>
-      <IconButton edge="end" aria-label="delete" sx={{ padding: "0px 15px" }} onClick={handleClickOpen}>
+      <IconButton
+        edge="end"
+        aria-label="delete"
+        sx={{ padding: "0px 15px" }}
+        onClick={handleClickOpen}
+      >
         <DeleteIcon />
       </IconButton>
       <Dialog open={open} onClose={handleClose}>

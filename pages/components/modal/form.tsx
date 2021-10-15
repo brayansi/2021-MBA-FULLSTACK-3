@@ -6,10 +6,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import EditIcon from "@mui/icons-material/Edit";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
+import * as agendamentoService from "../../services/agendamentoService";
 
 import {
   FormControl,
@@ -45,24 +46,31 @@ export default function FormDialog(props: any) {
 
   const onChangeData = (newValue: any) => {
     setData(newValue);
-  }
+  };
 
-  const create = () => {
-
-    const x = {agendamento, profissional, data};
-
-    console.log(agendamento);
-    console.log(profissional);
-    console.log(data);
-
-    if(agendamento && profissional && data) {
+  const onClick = () => {
+    if (agendamento && profissional && data) {
       if (type === "create") {
-        console.log("cadastrar");
+        agendamentoService
+          .createAgendamento({ agendamento, profissional, data })
+          .then(() => {
+            console.log("sucesso");
+          })
+          .catch(() => {
+            console.log("error");
+          });
       } else {
-        console.log("atualizar");
+        agendamentoService
+          .updateAgendamento({ agendamento, profissional, data })
+          .then(() => {
+            console.log("sucesso");
+          })
+          .catch(() => {
+            console.log("error");
+          });
       }
     } else {
-      console.log('formulário vazio')
+      console.log("formulário vazio");
     }
     handleClose();
   };
@@ -126,7 +134,7 @@ export default function FormDialog(props: any) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Fechar</Button>
-          <Button onClick={create}>
+          <Button onClick={onClick}>
             {type === "create" ? "Cadastrar" : "Atualizar"}
           </Button>
         </DialogActions>
