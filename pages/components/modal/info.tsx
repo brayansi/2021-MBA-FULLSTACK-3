@@ -1,14 +1,13 @@
 import * as React from "react";
 
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import InfoIcon from "@material-ui/icons/Info";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import InfoIcon from "@mui/icons-material/Info";
 
-import { IconButton } from "@material-ui/core";
+import { IconButton } from "@mui/material";
 
 export default function InfoDialog(props: any) {
   const { data } = props;

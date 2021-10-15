@@ -3,7 +3,7 @@ import {
   AppBar,
   Grid,
   Toolbar,
-} from "@material-ui/core";
+} from "@mui/material";
 import Image from "next/image";
 
 export default function AppBarComponent() {

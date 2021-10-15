@@ -2,12 +2,11 @@ import * as React from "react";
 
 import {
   Divider,
-  IconButton,
   List,
   ListItem,
   ListItemText,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import FormDialog from "../modal/form"
 import RemoveDialog from "../modal/remove"

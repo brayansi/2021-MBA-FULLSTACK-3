@@ -1,19 +1,28 @@
-import * as React from 'react';
+import * as React from "react";
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import EditIcon from "@material-ui/icons/Edit";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import EditIcon from "@mui/icons-material/Edit";
 
-import { IconButton } from '@material-ui/core';
-
+import {
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 
 export default function FormDialog(props: any) {
+
   const { type, data } = props;
   const [open, setOpen] = React.useState(false);
+  const [agendamento, setAgendamento] = React.useState(false);
+  const [profissional, setProfficional] = React.useState(false);
+  const [selectedDate, handleDateChange] = React.useState(new Date());
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -23,36 +32,77 @@ export default function FormDialog(props: any) {
     setOpen(false);
   };
 
+  const onChangeAgendamento = (event: any) => {
+    setAgendamento(event.target.value);
+  };
+
+  const onChangeProfissional = (event: any) => {
+    setProfficional(event.target.value);
+  };
+
   const create = () => {
-    if(type === 'create') {
-      console.log('cadastrar');
+    if (type === "create") {
+      console.log("cadastrar");
     } else {
-      console.log('atualizar')
+      console.log("atualizar");
     }
     handleClose();
-  }
+  };
 
   return (
     <div>
-      <IconButton edge="end" aria-label="delete" sx={{ padding: '0px 15px' }}  onClick={handleClickOpen}>
+      <IconButton
+        edge="end"
+        aria-label="delete"
+        sx={{ padding: "0px 15px" }}
+        onClick={handleClickOpen}
+      >
         <EditIcon />
       </IconButton>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{ type === 'create' ? 'Cadastrar Agendamento' : 'Atualizar Agendamento'}</DialogTitle>
+      <Dialog open={open} onClose={handleClose} sx={{ width: "100%" }}>
+        <DialogTitle>
+          {type === "create"
+            ? "Cadastrar Agendamento"
+            : "Atualizar Agendamento"}
+        </DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
+          <FormControl fullWidth>
+            <InputLabel id="agendamento">Agendamento</InputLabel>
+            <Select
+              labelId="agendamento"
+              id="agendamento"
+              value={agendamento}
+              label="Agendamento"
+              onChange={onChangeAgendamento}
+            >
+              <MenuItem value={1}>Fisioterapia 1</MenuItem>
+              <MenuItem value={2}>Fisioterapia 2</MenuItem>
+              <MenuItem value={3}>Fisioterapia 3</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="profissional">Profissional</InputLabel>
+            <Select
+              labelId="profissional"
+              id="profissional"
+              value={profissional}
+              label="Profissional"
+              onChange={onChangeProfissional}
+            >
+              <MenuItem value={1}>Profissional 1</MenuItem>
+              <MenuItem value={2}>Profissional 2</MenuItem>
+              <MenuItem value={3}>Profissional 3</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Fechar</Button>
-          <Button onClick={create}>{ type === 'create' ? 'Cadastrar' : 'Atualizar'}</Button>
+          <Button onClick={create}>
+            {type === "create" ? "Cadastrar" : "Atualizar"}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
