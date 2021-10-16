@@ -10,7 +10,8 @@ class ProfessionalService extends React.Component {
       this.state = {
         error: null,
         isLoaded: false,
-        items: []
+        items: [],
+        professional: 0
       };
     }
   
@@ -39,6 +40,12 @@ class ProfessionalService extends React.Component {
 
     render() {
       const { error, isLoaded, items } = this.state;
+
+      items.unshift({
+        id: 0,
+        name: "Selecione o Profissional"
+      });
+
       if (error) {
         return <div>Error: {error.message}</div>;
       } else if (!isLoaded) {
@@ -48,7 +55,7 @@ class ProfessionalService extends React.Component {
             <><Select
                 labelId="profissional"
                 id="profissional"
-                value={profissional}
+                value={this.state.professional}
                 label="Profissional"
                 onChange={this.change}
             >
