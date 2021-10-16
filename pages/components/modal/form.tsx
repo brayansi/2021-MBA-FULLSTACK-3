@@ -11,6 +11,8 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 
 import * as agendamentoService from "../../services/agendamentoService";
+import ProfessionalService from "../../services/professional/ProfessionalService";
+import ProcedureService from "../../services/procedure/ProcedureService";
 
 import {
   FormControl,
@@ -24,7 +26,7 @@ import {
 export default function FormDialog(props: any) {
   const { type } = props;
   const [open, setOpen] = React.useState(false);
-  const [agendamento, setAgendamento] = React.useState(null);
+  const [procedimento, setProcedimento] = React.useState(null);
   const [profissional, setProfficional] = React.useState(null);
   const [data, setData] = React.useState<Date | null>(null);
 
@@ -36,8 +38,8 @@ export default function FormDialog(props: any) {
     setOpen(false);
   };
 
-  const onChangeAgendamento = (event: any) => {
-    setAgendamento(event.target.value);
+  const onChangeProcedimento = (event: any) => {
+    setProcedimento(event.target.value);
   };
 
   const onChangeProfissional = (event: any) => {
@@ -49,10 +51,10 @@ export default function FormDialog(props: any) {
   };
 
   const onClick = () => {
-    if (agendamento && profissional && data) {
+    if (procedimento && profissional && data) {
       if (type === "create") {
         agendamentoService
-          .createAgendamento({ agendamento, profissional, data })
+          .createAgendamento({ procedimento, profissional, data })
           .then(() => {
             console.log("sucesso");
           })
@@ -61,7 +63,7 @@ export default function FormDialog(props: any) {
           });
       } else {
         agendamentoService
-          .updateAgendamento({ agendamento, profissional, data })
+          .updateAgendamento({ procedimento, profissional, data })
           .then(() => {
             console.log("sucesso");
           })
@@ -93,32 +95,12 @@ export default function FormDialog(props: any) {
         </DialogTitle>
         <DialogContent>
           <FormControl fullWidth>
-            <InputLabel id="agendamento">Agendamento</InputLabel>
-            <Select
-              labelId="agendamento"
-              id="agendamento"
-              value={agendamento}
-              label="Agendamento"
-              onChange={onChangeAgendamento}
-            >
-              <MenuItem value={1}>Fisioterapia 1</MenuItem>
-              <MenuItem value={2}>Fisioterapia 2</MenuItem>
-              <MenuItem value={3}>Fisioterapia 3</MenuItem>
-            </Select>
+            <InputLabel id="procedimento">Procedimento</InputLabel>
+            <ProcedureService />
           </FormControl>
           <FormControl fullWidth>
             <InputLabel id="profissional">Profissional</InputLabel>
-            <Select
-              labelId="profissional"
-              id="profissional"
-              value={profissional}
-              label="Profissional"
-              onChange={onChangeProfissional}
-            >
-              <MenuItem value={1}>Profissional 1</MenuItem>
-              <MenuItem value={2}>Profissional 2</MenuItem>
-              <MenuItem value={3}>Profissional 3</MenuItem>
-            </Select>
+            <ProfessionalService />
           </FormControl>
           <FormControl fullWidth>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
