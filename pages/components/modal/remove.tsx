@@ -24,14 +24,15 @@ export default function RemoveDialog(props: any) {
   };
 
   const remove = () => {
-    agendamentoService
-      .deleteAgendamento(data.id)
-      .then(() => {
-        console.log("sucesso");
-      })
-      .catch(() => {
-        console.log("error");
-      });
+    console.log('Remover: ' + data.id);
+    // agendamentoService
+    //   .deleteAgendamento(data.id)
+    //   .then(() => {
+    //     console.log("sucesso");
+    //   })
+    //   .catch(() => {
+    //     console.log("error");
+    //   });
     handleClose();
   };
 

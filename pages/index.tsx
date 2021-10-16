@@ -16,7 +16,6 @@ const Home: NextPage = () => {
         <AppBarComponent />
         <ListComponent />
       </StyledEngineProvider>
-      ,
     </div>
   );
 };

@@ -19,7 +19,7 @@ export function updateAgendamento(data) {
 }
 
 export function deleteAgendamento(id) {
-  return api.delete(`${path}/${data.id}`);
+  return api.delete(`${path}/${id}`);
 }
 
 export default api;

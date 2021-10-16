@@ -5,181 +5,60 @@ import {
   List,
   ListItem,
   ListItemText,
-  Typography,
 } from "@mui/material";
 
-import FormDialog from "../modal/form"
-import RemoveDialog from "../modal/remove"
-import styles from './../../../styles/list.module.css'
+import FormDialog from "../modal/form";
+import RemoveDialog from "../modal/remove";
+import styles from "./../../../styles/list.module.css";
 import InfoDialog from "../modal/info";
 
 import * as agendamentoService from "../../services/agendamentoService";
 
-export default function ListComponent() {
-  
-  React.useEffect(() => {
-      agendamentoService.getAgendamento().then((list)=> {
-        console.log(list);
-      }).catch(()=> {
-        console.log('error')
+export default class ListComponent extends React.Component {
+  state = {
+    lists: { 
+      data: []
+    },
+  };
+
+  componentDidMount() {
+    agendamentoService
+      .getAgendamento()
+      .then((lists) => {
+        this.setState({ lists });
+        console.log(this.state.lists);
+      })
+      .catch(() => {
+        console.log("error");
       });
-  }, []);
+  }
 
-  return (
-    <List sx={{ width: "100%", height: "100%" }}>
-      {/* Item */}
+  secondaryAction(item: any) {
+    return (
+      <div className={styles.listAction}>
+        <InfoDialog data={{ date: item.login, type: item.type }}/>
+        <FormDialog data={{ type: "update", data: item }} />
+        <RemoveDialog data={{ id: item.id }} />
+      </div>
+    )
+  }
 
-      <ListItem
-        alignItems="flex-start"
-        secondaryAction={
-          <div className={styles.listAction}>
-            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
-            <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog data={{id: '01'}} />
+  listItem(item: any) {
+    return (
+      <div>
+        <ListItem alignItems="flex-start" secondaryAction={this.secondaryAction(item)}>
+          <ListItemText primary={item.login} secondary={item.type}/>
+        </ListItem>
+        <Divider variant="inset" component="li" />
+      </div>
+    )
+  }
 
-          </div>
-        }
-      >
-        <ListItemText
-          primary="04/10/2021 - 21:26"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Fisioterapia
-              </Typography>
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-
-      {/* Item */}
-      
-      <ListItem
-        alignItems="flex-start"
-        secondaryAction={
-          <div className={styles.listAction}>
-            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
-            <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog data={{id: '01'}} />
-
-          </div>
-        }
-      >
-        <ListItemText
-          primary="04/10/2021 - 21:26"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Fisioterapia
-              </Typography>
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-
-      {/* Item */}
-      
-      <ListItem
-        alignItems="flex-start"
-        secondaryAction={
-          <div className={styles.listAction}>
-            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
-            <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog data={{id: '01'}} />
-          </div>
-        }
-      >
-        <ListItemText
-          primary="04/10/2021 - 21:26"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Fisioterapia
-              </Typography>
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-
-      {/* Item */}
-      
-      <ListItem
-        alignItems="flex-start"
-        secondaryAction={
-          <div className={styles.listAction}>
-            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
-            <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog data={{id: '01'}} />
-
-          </div>
-        }
-      >
-        <ListItemText
-          primary="04/10/2021 - 21:26"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Fisioterapia
-              </Typography>
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-
-      {/* Item */}
-      
-      <ListItem
-        alignItems="flex-start"
-        secondaryAction={
-          <div className={styles.listAction}>
-            <InfoDialog data={{date: '04/10/2021 - 21:26', type: 'Fisioterapia'}} />
-            <FormDialog data={{ type: 'update', data: null}}/>
-            <RemoveDialog data={{id: '01'}} />
-
-          </div>
-        }
-      >
-        <ListItemText
-          primary="04/10/2021 - 21:26"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Fisioterapia
-              </Typography>
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-    </List>
-  );
+  render() {
+    return (
+      <List sx={{ width: "100%", height: "100%", marginTop: "200px" }}>
+        { this.state.lists.data?.map((item: any) => this.listItem(item))}
+      </List>
+    );
+  }
 }
