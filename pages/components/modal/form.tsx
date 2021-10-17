@@ -113,11 +113,11 @@ export default class FormDialog extends React.Component<Props,{}> {
     const{ procedimento, profissional, data} = this.state;
 
     if (this.state.procedimento && this.state.profissional && this.state.data) {
-      if (this.state.type === "create") {
+      //if (this.state.type === "create") {
         this.create();
-      } else {
+      /*} else {
         this.update();
-      }
+      }*/
     } else {
       console.log("formulário vazio");
     }
@@ -127,13 +127,13 @@ export default class FormDialog extends React.Component<Props,{}> {
 
   create() {
     const data = {
-      date: "30/10/2021",
-      time: "09:30",
-        professional: this.state.profissionais.filter((profissional: any) => profissional.id === this.state.profissional)[0],
-        treatment: {
-          procedure: this.state.procedimentos.filter((procedimentos: any) => procedimentos.id === this.state.procedimentos)[0],
-          patient: { "id": 7 }
-        }
+      date: moment(this.state.data).format('MM/DD/yyyy'),
+      time: moment(this.state.data).format('HH:mm'),
+      professional: this.state.profissionais.filter((profissional: any) => profissional.id === this.state.profissional)[0],
+      treatment: {
+        procedure: this.state.procedimentos.filter((procedimento: any) => procedimento.id === this.state.procedimento)[0],
+        patient: { "id": 7 }
+      }
     }
     
     agendamentoService
