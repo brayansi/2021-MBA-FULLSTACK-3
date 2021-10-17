@@ -29,6 +29,7 @@ export default function RemoveDialog(props: any) {
        .deleteAgendamento(data.id)
        .then(() => {
          console.log("sucesso");
+         window.location.reload();
        })
        .catch(() => {
          console.log("error");
