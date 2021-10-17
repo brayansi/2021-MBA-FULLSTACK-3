@@ -8,6 +8,7 @@ import React from "react";
 import styles from "../styles/home.module.css";
 import ListComponent from "./components/list/list";
 import AppBarComponent from "./components/Appbar/AppBarCompoent";
+import FormDialog from "./components/modal/form";
 
 const Home: NextPage = () => {
   return (
@@ -15,6 +16,7 @@ const Home: NextPage = () => {
       <StyledEngineProvider injectFirst>
         <AppBarComponent />
         <ListComponent />
+        <FormDialog data={{ type: 'create', data: null }} />
       </StyledEngineProvider>
     </div>
   );

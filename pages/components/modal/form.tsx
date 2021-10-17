@@ -26,23 +26,23 @@ import {
 import moment from "moment";
 
 interface Props {
-  data:any
+  data: any;
 }
 
-export default class FormDialog extends React.Component<Props,{}> {
+export default class FormDialog extends React.Component<Props, {}> {
   state = {
     //dialog
     open: false,
-    type: 'create',
-    
+    type: "create",
+
     //list
-    procedimentos : [],
+    procedimentos: [],
     profissionais: [],
 
     //form
     procedimento: 0,
     profissional: 0,
-    data: null
+    data: null,
   };
 
   constructor(props: any) {
@@ -53,16 +53,20 @@ export default class FormDialog extends React.Component<Props,{}> {
     this.handleClose = this.handleClose.bind(this);
     this.onChangeProcedimento = this.onChangeProcedimento.bind(this);
     this.onChangeProfissional = this.onChangeProfissional.bind(this);
-    this.onChangeData = this.onChangeData.bind(this); 
-    this.onClick = this.onClick.bind(this); 
+    this.onChangeData = this.onChangeData.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   async componentDidMount() {
-    
-    const { treatment, professional, date, time } = this.props.data.data;
-    this.setState({procedimento: (treatment.procedure) ? treatment.procedure.id : 0, 
-        profissional: professional.id, 
-        data: new Date(`${date} ${time}`)})
+    if(this.props.data.type === 'update') {
+      const { treatment, professional, date, time } = this.props.data.data;
+      
+      this.setState({
+        procedimento: treatment.procedure ? treatment.procedure.id : 0,
+        profissional: professional.id,
+        data: new Date(`${date} ${time}`),
+      });
+    }
 
     await agendamentoService
       .getProcedimentos()
@@ -72,7 +76,7 @@ export default class FormDialog extends React.Component<Props,{}> {
       .catch(() => {
         console.log("Erro ao listar procedimentos");
       });
-    
+
     await agendamentoService
       .getProfissionais()
       .then((result: any) => {
@@ -82,35 +86,33 @@ export default class FormDialog extends React.Component<Props,{}> {
         console.log("Erro ao listar profissionais");
       });
   }
- 
 
-  onUpdate(){
-    this.setState({open: true, type: 'update'});
+  onUpdate() {
+    this.setState({ open: true, type: "update" });
   }
 
-  onCreate(){
-    this.setState({open: true, type: 'create'});
+  onCreate() {
+    this.setState({ open: true, type: "create" });
   }
-
 
   handleClose(): void {
-    this.setState({open: false});
+    this.setState({ open: false });
   }
 
-  onChangeProcedimento(event: any){
-    this.setState({procedimento: event.target.value});
+  onChangeProcedimento(event: any) {
+    this.setState({ procedimento: event.target.value });
   }
 
-  onChangeProfissional(event: any){
-    this.setState({profissional: event.target.value});
+  onChangeProfissional(event: any) {
+    this.setState({ profissional: event.target.value });
   }
 
-  onChangeData(newValue: any){
-    this.setState({data: newValue});
+  onChangeData(newValue: any) {
+    this.setState({ data: newValue });
   }
 
-  onClick(){
-    const{ procedimento, profissional, data} = this.state;
+  onClick() {
+    const { procedimento, profissional, data } = this.state;
 
     if (this.state.procedimento && this.state.profissional && this.state.data) {
       if (this.state.type === "create") {
@@ -121,21 +123,25 @@ export default class FormDialog extends React.Component<Props,{}> {
     } else {
       console.log("formulário vazio");
     }
-    
+
     this.handleClose();
   }
 
   create() {
     const data = {
-      date: moment(this.state.data).format('MM/DD/yyyy'),
-      time: moment(this.state.data).format('HH:mm'),
-      professional: this.state.profissionais.filter((profissional: any) => profissional.id === this.state.profissional)[0],
+      date: moment(this.state.data).format("MM/DD/yyyy"),
+      time: moment(this.state.data).format("HH:mm"),
+      professional: this.state.profissionais.filter(
+        (profissional: any) => profissional.id === this.state.profissional
+      )[0],
       treatment: {
-        procedure: this.state.procedimentos.filter((procedimento: any) => procedimento.id === this.state.procedimento)[0],
-        patient: { "id": 7 }
-      }
-    }
-    
+        procedure: this.state.procedimentos.filter(
+          (procedimento: any) => procedimento.id === this.state.procedimento
+        )[0],
+        patient: { id: 7 },
+      },
+    };
+
     agendamentoService
       .saveAgendamento(data)
       .then(() => {
@@ -149,11 +155,15 @@ export default class FormDialog extends React.Component<Props,{}> {
 
   update() {
     const data = this.props.data.data;
-        
+
     data.date = moment(this.state.data).format('MM/DD/yyyy');
-    data.time = moment(this.state.data).format('HH:mm');
-    data.professional = this.state.profissionais.filter((profissional: any) => profissional.id === this.state.profissional)[0];
-    data.treatment.procedure = this.state.procedimentos.filter((procedimento: any) => procedimento.id === this.state.procedimento)[0];
+    data.time = moment(this.state.data).format("HH:mm");
+    data.professional = this.state.profissionais.filter(
+      (profissional: any) => profissional.id === this.state.profissional
+    )[0];
+    data.treatment.procedure = this.state.procedimentos.filter(
+      (procedimento: any) => procedimento.id === this.state.procedimento
+    )[0];
 
     agendamentoService
       .saveAgendamento(data)
@@ -163,37 +173,47 @@ export default class FormDialog extends React.Component<Props,{}> {
       })
       .catch(() => {
         console.log("Erro ao atualizar agendamento");
-    });
+      });
   }
 
   listItem(item: any) {
     return (
-      <MenuItem key={item.id} value={item.id}>{item.name} {item.lastname ? item.lastname : ''}</MenuItem>
-    )
+      <MenuItem key={item.id} value={item.id}>
+        {item.name} {item.lastname ? item.lastname : ""}
+      </MenuItem>
+    );
   }
 
-  render(){
-      return (
+  render() {
+    return (
       <div>
-        <Fab size="medium" color="secondary" aria-label="add">
-          <AddIcon />
-        </Fab>
-        <IconButton
-          edge="end"
-          aria-label="delete"
-          sx={{ padding: "0px 15px" }}
-          onClick={this.onUpdate}
+        {this.props.data.type === "create" ? (
+          <Fab size="medium"  color="primary" aria-label="add"  sx={{ position: "absolute", bottom: "20px", right: "20px", margin: "auto",
+          left: "20px" }}>
+            <AddIcon onClick={this.onCreate} />
+          </Fab>
+        ) : (
+          <IconButton
+            edge="end"
+            aria-label="delete"
+            sx={{ padding: "0px 15px" }}
+            onClick={this.onUpdate}
+          >
+            <EditIcon />
+          </IconButton>
+        )}
+
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
         >
-          <EditIcon />
-        </IconButton>
-        <Dialog open={this.state.open} onClose={this.handleClose} sx={{ width: "100%" }}>
           <DialogTitle>
             {this.state.type === "create"
               ? "Cadastrar Agendamento"
               : "Atualizar Agendamento"}
           </DialogTitle>
-          <DialogContent>
-            <FormControl fullWidth>
+          <DialogContent sx={{ maxWidth: '350px' }}>
+            <FormControl fullWidth sx={{ marginTop: '15px' }}>
               <InputLabel id="procedimento">Procedimento</InputLabel>
               <Select
                 labelId="procedimento"
@@ -202,10 +222,12 @@ export default class FormDialog extends React.Component<Props,{}> {
                 label="Procedimento"
                 onChange={this.onChangeProcedimento}
               >
-                { this.state.procedimentos?.map((item: any) => this.listItem(item))}
+                {this.state.procedimentos?.map((item: any) =>
+                  this.listItem(item)
+                )}
               </Select>
             </FormControl>
-            <FormControl fullWidth>
+            <FormControl fullWidth sx={{ marginTop: '15px' }}>
               <InputLabel id="profissional">Profissional</InputLabel>
               <Select
                 labelId="profissional"
@@ -213,10 +235,12 @@ export default class FormDialog extends React.Component<Props,{}> {
                 value={this.state.profissional}
                 onChange={this.onChangeProfissional}
               >
-                { this.state.profissionais?.map((item: any) => this.listItem(item))}
+                {this.state.profissionais?.map((item: any) =>
+                  this.listItem(item)
+                )}
               </Select>
             </FormControl>
-            <FormControl fullWidth>
+            <FormControl fullWidth sx={{ marginTop: '15px' }}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
                   renderInput={(props: any) => <TextField {...props} />}
