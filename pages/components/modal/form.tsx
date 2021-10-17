@@ -23,6 +23,8 @@ import {
   TextField,
 } from "@mui/material";
 
+import moment from "moment";
+
 interface Props {
   data:any
 }
@@ -58,7 +60,9 @@ export default class FormDialog extends React.Component<Props,{}> {
   async componentDidMount() {
     
     const { treatment, professional, date, time } = this.props.data.data;
-    this.setState({procedimento: treatment.procedure.id , profissional: professional.id, data: new Date(`${date} ${time}`)})
+    this.setState({procedimento: (treatment.procedure) ? treatment.procedure.id : 0, 
+        profissional: professional.id, 
+        data: new Date(`${date} ${time}`)})
 
     await agendamentoService
       .getProcedimentos()
@@ -117,7 +121,7 @@ export default class FormDialog extends React.Component<Props,{}> {
     } else {
       console.log("formulário vazio");
     }
-
+    
     this.handleClose();
   }
 
@@ -144,18 +148,20 @@ export default class FormDialog extends React.Component<Props,{}> {
 
   update() {
     const data = this.props.data.data;
-        data.date = this.state.data;
-        data.professional = this.state.profissionais.filter((profissional: any) => profissional.id === this.state.profissional)[0];
-        data.treatment.procedure = this.state.procedimentos.filter((procedimentos: any) => procedimentos.id === this.state.procedimentos)[0];
+        
+    data.date = moment(this.state.data).format('MM/DD/yyyy');
+    data.time = moment(this.state.data).format('HH:mm');
+    data.professional = this.state.profissionais.filter((profissional: any) => profissional.id === this.state.profissional)[0];
+    data.treatment.procedure = this.state.procedimentos.filter((procedimento: any) => procedimento.id === this.state.procedimento)[0];
 
-        agendamentoService
-        .saveAgendamento(data)
-        .then(() => {
-          console.log("Agendamento atualizado com sucesso");
-        })
-        .catch(() => {
-          console.log("Erro ao atualizar agendamento");
-        });
+    agendamentoService
+      .saveAgendamento(data)
+      .then(() => {
+        console.log("Agendamento atualizado com sucesso");
+      })
+      .catch(() => {
+        console.log("Erro ao atualizar agendamento");
+    });
   }
 
   listItem(item: any) {
