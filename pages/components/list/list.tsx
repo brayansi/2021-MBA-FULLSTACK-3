@@ -24,9 +24,8 @@ export default class ListComponent extends React.Component {
   componentDidMount() {
     agendamentoService
       .getAgendamento()
-      .then((lists) => {
+      .then((lists: any) => {
         this.setState({ lists });
-        console.log(this.state.lists);
       })
       .catch(() => {
         console.log("error");
@@ -36,8 +35,8 @@ export default class ListComponent extends React.Component {
   secondaryAction(item: any) {
     return (
       <div className={styles.listAction}>
-        <InfoDialog data={{ date: item.login, type: item.type }}/>
-        <FormDialog data={{ type: "update", data: item }} />
+        <InfoDialog data={{ date: item.date, type: item.treatment.procedure.name }}/>
+        <FormDialog data={{ data: item }} />
         <RemoveDialog data={{ id: item.id }} />
       </div>
     )
@@ -45,12 +44,12 @@ export default class ListComponent extends React.Component {
 
   listItem(item: any) {
     return (
-      <div>
+      <React.Fragment key={item.id}>
         <ListItem alignItems="flex-start" secondaryAction={this.secondaryAction(item)}>
-          <ListItemText primary={item.login} secondary={item.type}/>
+          <ListItemText primary={item.date} secondary={item.treatment.procedure.name}/>
         </ListItem>
         <Divider variant="inset" component="li" />
-      </div>
+      </React.Fragment>
     )
   }
 

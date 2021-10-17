@@ -1,25 +1,35 @@
 import axios from "axios";
 
 const path = '/users';
+const procedurePath = '/procedure';
+const professionalPath = '/professional';
+const appointmentPath = '/appointment';
 
 const api = axios.create({
-  baseURL: "https://api.github.com",
+  baseURL: "http://localhost:8080/clintech",
 });
 
 export function getAgendamento() {
-  return api.get(`${path}`);
+  //the service will get the appointments for the user
+  //the last path parameter is the user id
+  //for the purpose of this exercise it is hardcoded.
+  return api.get(`${appointmentPath}/list/7`);
 }
 
-export function createAgendamento(data) {
-  return api.post(`${path}/${data.id}`, data);
-}
-
-export function updateAgendamento(data) {
-  return api.put(`${path}/${data.id}`, data);
+export function saveAgendamento(data) {
+  return api.post(`${appointmentPath}`, data);
 }
 
 export function deleteAgendamento(id) {
   return api.delete(`${path}/${id}`);
+}
+
+export function getProcedimentos() {
+  return api.get(`${procedurePath}/list`);
+}
+
+export function getProfissionais() {
+  return api.get(`${professionalPath}/list`);
 }
 
 export default api;

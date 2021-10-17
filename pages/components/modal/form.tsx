@@ -6,6 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
@@ -13,6 +14,7 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import * as agendamentoService from "../../services/agendamentoService";
 
 import {
+  Fab,
   FormControl,
   IconButton,
   InputLabel,
@@ -21,124 +23,217 @@ import {
   TextField,
 } from "@mui/material";
 
-export default function FormDialog(props: any) {
-  const { type } = props;
-  const [open, setOpen] = React.useState(false);
-  const [agendamento, setAgendamento] = React.useState(null);
-  const [profissional, setProfficional] = React.useState(null);
-  const [data, setData] = React.useState<Date | null>(null);
+import moment from "moment";
 
-  const handleClickOpen = () => {
-    setOpen(true);
+interface Props {
+  data:any
+}
+
+export default class FormDialog extends React.Component<Props,{}> {
+  state = {
+    //dialog
+    open: false,
+    type: 'create',
+    
+    //list
+    procedimentos : [],
+    profissionais: [],
+
+    //form
+    procedimento: 0,
+    profissional: 0,
+    data: null
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  constructor(props: any) {
+    super(props);
 
-  const onChangeAgendamento = (event: any) => {
-    setAgendamento(event.target.value);
-  };
+    this.onCreate = this.onCreate.bind(this);
+    this.onUpdate = this.onUpdate.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.onChangeProcedimento = this.onChangeProcedimento.bind(this);
+    this.onChangeProfissional = this.onChangeProfissional.bind(this);
+    this.onChangeData = this.onChangeData.bind(this); 
+    this.onClick = this.onClick.bind(this); 
+  }
 
-  const onChangeProfissional = (event: any) => {
-    setProfficional(event.target.value);
-  };
+  async componentDidMount() {
+    
+    const { treatment, professional, date, time } = this.props.data.data;
+    this.setState({procedimento: (treatment.procedure) ? treatment.procedure.id : 0, 
+        profissional: professional.id, 
+        data: new Date(`${date} ${time}`)})
 
-  const onChangeData = (newValue: any) => {
-    setData(newValue);
-  };
+    await agendamentoService
+      .getProcedimentos()
+      .then((result: any) => {
+        this.setState({ procedimentos: result.data });
+      })
+      .catch(() => {
+        console.log("Erro ao listar procedimentos");
+      });
+    
+    await agendamentoService
+      .getProfissionais()
+      .then((result: any) => {
+        this.setState({ profissionais: result.data });
+      })
+      .catch(() => {
+        console.log("Erro ao listar profissionais");
+      });
+  }
+ 
 
-  const onClick = () => {
-    if (agendamento && profissional && data) {
-      if (type === "create") {
-        agendamentoService
-          .createAgendamento({ agendamento, profissional, data })
-          .then(() => {
-            console.log("sucesso");
-          })
-          .catch(() => {
-            console.log("error");
-          });
-      } else {
-        agendamentoService
-          .updateAgendamento({ agendamento, profissional, data })
-          .then(() => {
-            console.log("sucesso");
-          })
-          .catch(() => {
-            console.log("error");
-          });
-      }
+  onUpdate(){
+    this.setState({open: true, type: 'update'});
+  }
+
+  onCreate(){
+    this.setState({open: true, type: 'create'});
+  }
+
+
+  handleClose(): void {
+    this.setState({open: false});
+  }
+
+  onChangeProcedimento(event: any){
+    this.setState({procedimento: event.target.value});
+  }
+
+  onChangeProfissional(event: any){
+    this.setState({profissional: event.target.value});
+  }
+
+  onChangeData(newValue: any){
+    this.setState({data: newValue});
+  }
+
+  onClick(){
+    const{ procedimento, profissional, data} = this.state;
+
+    if (this.state.procedimento && this.state.profissional && this.state.data) {
+      //if (this.state.type === "create") {
+        this.create();
+      /*} else {
+        this.update();
+      }*/
     } else {
       console.log("formulário vazio");
     }
-    handleClose();
-  };
+    
+    this.handleClose();
+  }
 
-  return (
-    <div>
-      <IconButton
-        edge="end"
-        aria-label="delete"
-        sx={{ padding: "0px 15px" }}
-        onClick={handleClickOpen}
-      >
-        <EditIcon />
-      </IconButton>
-      <Dialog open={open} onClose={handleClose} sx={{ width: "100%" }}>
-        <DialogTitle>
-          {type === "create"
-            ? "Cadastrar Agendamento"
-            : "Atualizar Agendamento"}
-        </DialogTitle>
-        <DialogContent>
-          <FormControl fullWidth>
-            <InputLabel id="agendamento">Agendamento</InputLabel>
-            <Select
-              labelId="agendamento"
-              id="agendamento"
-              value={agendamento}
-              label="Agendamento"
-              onChange={onChangeAgendamento}
-            >
-              <MenuItem value={1}>Fisioterapia 1</MenuItem>
-              <MenuItem value={2}>Fisioterapia 2</MenuItem>
-              <MenuItem value={3}>Fisioterapia 3</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="profissional">Profissional</InputLabel>
-            <Select
-              labelId="profissional"
-              id="profissional"
-              value={profissional}
-              label="Profissional"
-              onChange={onChangeProfissional}
-            >
-              <MenuItem value={1}>Profissional 1</MenuItem>
-              <MenuItem value={2}>Profissional 2</MenuItem>
-              <MenuItem value={3}>Profissional 3</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                renderInput={(props) => <TextField {...props} />}
-                label="DateTimePicker"
-                value={data}
-                onChange={onChangeData}
-                inputFormat="dd-MM-yyyy HH:mm"
-              />
-            </LocalizationProvider>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Fechar</Button>
-          <Button onClick={onClick}>
-            {type === "create" ? "Cadastrar" : "Atualizar"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+  create() {
+    const data = {
+      date: moment(this.state.data).format('MM/DD/yyyy'),
+      time: moment(this.state.data).format('HH:mm'),
+      professional: this.state.profissionais.filter((profissional: any) => profissional.id === this.state.profissional)[0],
+      treatment: {
+        procedure: this.state.procedimentos.filter((procedimento: any) => procedimento.id === this.state.procedimento)[0],
+        patient: { "id": 7 }
+      }
+    }
+    
+    agendamentoService
+      .saveAgendamento(data)
+      .then(() => {
+        console.log("Agendamento cadastrato com sucesso");
+      })
+      .catch(() => {
+        console.log("Erro ao cadastrar agendamento");
+      });
+  }
+
+  update() {
+    const data = this.props.data.data;
+        
+    data.date = moment(this.state.data).format('MM/DD/yyyy');
+    data.time = moment(this.state.data).format('HH:mm');
+    data.professional = this.state.profissionais.filter((profissional: any) => profissional.id === this.state.profissional)[0];
+    data.treatment.procedure = this.state.procedimentos.filter((procedimento: any) => procedimento.id === this.state.procedimento)[0];
+
+    agendamentoService
+      .saveAgendamento(data)
+      .then(() => {
+        console.log("Agendamento atualizado com sucesso");
+      })
+      .catch(() => {
+        console.log("Erro ao atualizar agendamento");
+    });
+  }
+
+  listItem(item: any) {
+    return (
+      <MenuItem key={item.id} value={item.id}>{item.name} {item.lastname ? item.lastname : ''}</MenuItem>
+    )
+  }
+
+  render(){
+      return (
+      <div>
+        <Fab size="medium" color="secondary" aria-label="add">
+          <AddIcon />
+        </Fab>
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          sx={{ padding: "0px 15px" }}
+          onClick={this.onUpdate}
+        >
+          <EditIcon />
+        </IconButton>
+        <Dialog open={this.state.open} onClose={this.handleClose} sx={{ width: "100%" }}>
+          <DialogTitle>
+            {this.state.type === "create"
+              ? "Cadastrar Agendamento"
+              : "Atualizar Agendamento"}
+          </DialogTitle>
+          <DialogContent>
+            <FormControl fullWidth>
+              <InputLabel id="procedimento">Procedimento</InputLabel>
+              <Select
+                labelId="procedimento"
+                id="procedimento"
+                value={this.state.procedimento}
+                label="Procedimento"
+                onChange={this.onChangeProcedimento}
+              >
+                { this.state.procedimentos?.map((item: any) => this.listItem(item))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="profissional">Profissional</InputLabel>
+              <Select
+                labelId="profissional"
+                id="profissional"
+                value={this.state.profissional}
+                onChange={this.onChangeProfissional}
+              >
+                { this.state.profissionais?.map((item: any) => this.listItem(item))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker
+                  renderInput={(props: any) => <TextField {...props} />}
+                  label="Selecione uma data"
+                  value={this.state.data}
+                  onChange={this.onChangeData}
+                  inputFormat="dd/MM/yyyy HH:mm"
+                />
+              </LocalizationProvider>
+            </FormControl>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose}>Fechar</Button>
+            <Button onClick={this.onClick}>
+              {this.state.type === "create" ? "Cadastrar" : "Atualizar"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 }
