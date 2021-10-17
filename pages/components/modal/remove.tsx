@@ -25,14 +25,14 @@ export default function RemoveDialog(props: any) {
 
   const remove = () => {
     console.log('Remover: ' + data.id);
-    // agendamentoService
-    //   .deleteAgendamento(data.id)
-    //   .then(() => {
-    //     console.log("sucesso");
-    //   })
-    //   .catch(() => {
-    //     console.log("error");
-    //   });
+    agendamentoService
+       .deleteAgendamento(data.id)
+       .then(() => {
+         console.log("sucesso");
+       })
+       .catch(() => {
+         console.log("error");
+       });
     handleClose();
   };
 
