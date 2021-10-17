@@ -10,9 +10,9 @@ const api = axios.create({
 });
 
 export function getAgendamento() {
-  //the service will get the appointments for the user
-  //the last path parameter is the user id
-  //for the purpose of this exercise it is hardcoded.
+  //The service will get the appointments for the user.
+  //The last path parameter is the user id.
+  //For the purpose of this exercise it is hardcoded.
   return api.get(`${appointmentPath}/list/7`);
 }
 
@@ -21,7 +21,7 @@ export function saveAgendamento(data) {
 }
 
 export function deleteAgendamento(id) {
-  return api.delete(`${path}/${id}`);
+  return api.delete(`${appointmentPath}/${id}`);
 }
 
 export function getProcedimentos() {
