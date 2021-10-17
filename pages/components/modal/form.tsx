@@ -113,11 +113,11 @@ export default class FormDialog extends React.Component<Props,{}> {
     const{ procedimento, profissional, data} = this.state;
 
     if (this.state.procedimento && this.state.profissional && this.state.data) {
-      //if (this.state.type === "create") {
+      if (this.state.type === "create") {
         this.create();
-      /*} else {
+      } else {
         this.update();
-      }*/
+      }
     } else {
       console.log("formulário vazio");
     }
