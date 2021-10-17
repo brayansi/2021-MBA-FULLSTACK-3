@@ -35,7 +35,7 @@ export default class ListComponent extends React.Component {
   secondaryAction(item: any) {
     return (
       <div className={styles.listAction}>
-        <InfoDialog data={{ date: item.date, type: item.treatment.procedure.name }}/>
+        <InfoDialog data={{ date: item.date, time: item.time, type: item.treatment.procedure.name, professional: item.professional }}/>
         <FormDialog data={{ data: item }} />
         <RemoveDialog data={{ id: item.id }} />
       </div>

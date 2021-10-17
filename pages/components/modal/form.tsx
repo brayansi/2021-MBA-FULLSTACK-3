@@ -140,6 +140,7 @@ export default class FormDialog extends React.Component<Props,{}> {
       .saveAgendamento(data)
       .then(() => {
         console.log("Agendamento cadastrato com sucesso");
+        window.location.reload();
       })
       .catch(() => {
         console.log("Erro ao cadastrar agendamento");
@@ -158,6 +159,7 @@ export default class FormDialog extends React.Component<Props,{}> {
       .saveAgendamento(data)
       .then(() => {
         console.log("Agendamento atualizado com sucesso");
+        window.location.reload();
       })
       .catch(() => {
         console.log("Erro ao atualizar agendamento");
